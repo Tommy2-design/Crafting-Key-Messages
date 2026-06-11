@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-Class Activity 1 — Crafting Key Messages</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#22202A;
+    --paper:#FAF8F4;
+    --card:#FFFFFF;
+    --accent:#8C3B5D;        /* mulberry — key messages */
+    --accent-soft:#F4E6EC;
+    --pos:#2E7D5B;
+    --pos-soft:#E4F1EA;
+    --neg:#C04A35;
+    --neg-soft:#F8E9E5;
+    --muted:#7A7585;
+    --line:#E7E2DA;
+    --radius:14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:660px;margin:0 auto;padding:32px 20px 80px}
+  .eyebrow{
+    font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:10px;
+  }
+  h1{
+    font-family:'Bricolage Grotesque','Inter',sans-serif;
+    font-weight:800;font-size:clamp(26px,5.5vw,36px);line-height:1.12;
+    margin-bottom:10px;letter-spacing:-.01em;
+  }
+  .sub{color:var(--muted);font-size:15px;margin-bottom:28px;max-width:54ch}
+  .brief{
+    background:var(--ink);color:#F4F1EC;border-radius:var(--radius);
+    padding:22px 24px;margin-bottom:28px;
+  }
+  .brief .tag{
+    display:inline-block;font-size:11px;font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink);background:#EBC8D7;
+    padding:3px 10px;border-radius:99px;margin-bottom:12px;
+  }
+  .brief h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px;
+  }
+  .brief p{font-size:14.5px;color:#D8D4DF;max-width:58ch}
+  .brief p strong{color:#fff}
+  .progress{display:flex;gap:6px;margin-bottom:22px}
+  .seg{height:5px;flex:1;border-radius:99px;background:var(--line);transition:background .3s}
+  .seg.done{background:var(--accent)}
+  .seg.now{background:var(--accent);opacity:.45}
+  .qcount{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px}
+  .qtext{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+    font-size:clamp(18px,4.2vw,22px);line-height:1.3;margin-bottom:18px;
+  }
+  .opt{
+    display:flex;gap:14px;align-items:flex-start;width:100%;text-align:left;
+    background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:15px 16px;margin-bottom:10px;cursor:pointer;
+    font:inherit;font-size:15px;color:var(--ink);
+    transition:border-color .15s, transform .1s, background .15s;
+  }
+  .opt:hover:not(:disabled){border-color:var(--accent);transform:translateY(-1px)}
+  .opt:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .opt:disabled{cursor:default}
+  .opt .key{
+    flex:none;width:26px;height:26px;border-radius:7px;
+    background:var(--accent-soft);color:var(--accent);
+    font-weight:700;font-size:13px;display:grid;place-items:center;margin-top:1px;
+  }
+  .opt.correct{border-color:var(--pos);background:var(--pos-soft)}
+  .opt.correct .key{background:var(--pos);color:#fff}
+  .opt.wrong{border-color:var(--neg);background:var(--neg-soft)}
+  .opt.wrong .key{background:var(--neg);color:#fff}
+  .opt.dim{opacity:.45}
+  .feedback{
+    border-radius:var(--radius);padding:16px 18px;margin:16px 0 20px;
+    font-size:14.5px;display:none;
+  }
+  .feedback.show{display:block;animation:rise .25s ease}
+  .feedback.good{background:var(--pos-soft);border:1.5px solid var(--pos)}
+  .feedback.bad{background:var(--neg-soft);border:1.5px solid var(--neg)}
+  .feedback b{display:block;margin-bottom:4px;font-size:14px}
+  .feedback.good b{color:var(--pos)}
+  .feedback.bad b{color:var(--neg)}
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .btn{
+    font:inherit;font-weight:700;font-size:15px;color:#fff;background:var(--accent);
+    border:none;border-radius:99px;padding:13px 30px;cursor:pointer;display:none;
+    transition:transform .1s, opacity .15s;
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .btn.show{display:inline-block}
+  .result{display:none;text-align:left}
+  .result.show{display:block;animation:rise .3s ease}
+  .score{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:clamp(40px,10vw,64px);color:var(--accent);line-height:1;margin:6px 0 4px;
+  }
+  .result h2{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;margin-top:24px;margin-bottom:12px}
+  .recap{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-bottom:10px;font-size:14.5px}
+  .recap .rq{font-weight:700;margin-bottom:4px}
+  .recap .ra{color:var(--muted)}
+  .recap .ra b{color:var(--ink)}
+  .pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:99px;padding:2px 10px;margin-bottom:8px}
+  .pill.ok{background:var(--pos-soft);color:var(--pos)}
+  .pill.no{background:var(--neg-soft);color:var(--neg)}
+  .footer{margin-top:36px;font-size:12.5px;color:var(--muted)}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">MKTG 1419 · Week 6 · Pre-class activity 1 of 3</p>
+  <h1>Crafting Key Messages</h1>
+  <p class="sub">Five quick questions on the Message Framing for Brand Communication (MFBC) model — self-construal, involvement and product knowledge. You'll get feedback after every answer.</p>
+
+  <div class="brief">
+    <span class="tag">Client brief</span>
+    <h2>An Nhiên — organic baby formula</h2>
+    <p>A Vietnamese brand launching an organic infant formula. Core persona: <strong>Chị Hoa, 29, a first-time mum in Cần Thơ.</strong> She chooses products her mother and sisters recommend, worries constantly about her baby's health, and feels lost among the many formula brands on the shelf.</p>
+  </div>
+
+  <div class="progress" id="progress"></div>
+
+  <div id="quiz">
+    <p class="qcount" id="qcount"></p>
+    <p class="qtext" id="qtext"></p>
+    <div id="opts"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn" id="nextBtn">Next question</button>
+  </div>
+
+  <div class="result" id="result">
+    <p class="eyebrow">Your result</p>
+    <p class="score" id="scoreNum"></p>
+    <p class="sub" id="scoreMsg"></p>
+    <h2>Quick recap</h2>
+    <div id="recapList"></div>
+    <button class="btn show" id="retryBtn" style="margin-top:14px">Try again</button>
+  </div>
+
+  <p class="footer">Based on Tsai (2007), Message Framing for Brand Communication — Week 6 lecture, MKTG 1419.</p>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "Chị Hoa picks the formula her mother and sisters recommend, and a big part of her decision is what her family will think. In the MFBC model, what does this tell us about her?",
+    opts: [
+      "She has an independent self-construal — she is driven by personal goals",
+      "She has an interdependent self-construal — she is driven by family and group",
+      "She has high product knowledge — she evaluates on facts",
+      "She has low involvement — the purchase doesn't matter much to her"
+    ],
+    answer: 1,
+    why: "Decisions guided by family, group and community signal an interdependent self-construal — common in collectivist cultures, including Vietnam. The MFBC model says interdependent audiences respond better to negative framing."
+  },
+  {
+    q: "Baby formula is a high-stakes purchase: it affects her baby's health and is not easy to 'just swap' if it goes wrong. According to the MFBC model, high involvement means…",
+    opts: [
+      "Positive framing works best — keep it light and fun",
+      "Framing doesn't matter — any message will do",
+      "Negative framing works best — highlight what could be lost",
+      "Only price-based messages will work"
+    ],
+    answer: 2,
+    why: "High-involvement purchases (health, finance, family) make people loss-sensitive, so negative framing — showing what they stand to lose — works best. Positive framing is for low-stakes, casual purchases like snacks or shampoo."
+  },
+  {
+    q: "An Nhiên also wants to win over paediatric nutritionists who may recommend formula to parents. These experts know the category inside out. How should the brand talk to them?",
+    opts: [
+      "Use strong positive framing with warm, emotional storytelling",
+      "Use fear-based negative framing about competitor products",
+      "Lead with facts, proof and certifications — framing barely works on experts",
+      "Avoid them — experts can't be influenced at all"
+    ],
+    answer: 2,
+    why: "High-knowledge audiences evaluate substance, not presentation. Emotional framing barely moves them, so the message should lead with evidence: clinical data, certifications, ingredient proof."
+  },
+  {
+    q: "Chị Hoa is interdependent, highly involved, and a novice in the category. Which option is the strongest umbrella (big) message for her?",
+    opts: [
+      "\"An Nhiên — the tastiest milk for happy mornings!\"",
+      "\"Don't let a wrong choice on the shelf decide your baby's start in life.\"",
+      "\"An Nhiên: 28 clinical trials and ISO 22000 certified.\"",
+      "\"Buy 2 boxes this week and get 1 free!\""
+    ],
+    answer: 1,
+    why: "Her profile (interdependent + high involvement) points to negative framing: one emotional idea about what the family could lose. Option A is generic positive, C is a facts-only message better suited to experts, and D is a sales promotion — not a big message at all."
+  },
+  {
+    q: "The big message anchors several sub-key messages, and a balanced strategy mixes frames. Which of these is a POSITIVE-framing sub-key message?",
+    opts: [
+      "\"Pure ingredients, peaceful nights — give your family the start they deserve.\"",
+      "\"Skipping quality checks could cost your baby's health.\"",
+      "\"Most cheap formulas fail independent safety tests.\"",
+      "\"Certified organic to EU standards since 2019.\""
+    ],
+    answer: 0,
+    why: "Positive framing emphasises what the audience gains — peace of mind, a good start. Options B and C are negative framing (what could be lost), and D is a facts-only message."
+  }
+];
+
+let current = 0, score = 0;
+const answers = [];
+
+const progress = document.getElementById('progress');
+QUESTIONS.forEach(() => {
+  const s = document.createElement('div');
+  s.className = 'seg';
+  progress.appendChild(s);
+});
+
+function renderProgress(){
+  [...progress.children].forEach((s,i)=>{
+    s.className = 'seg' + (i < current ? ' done' : i === current ? ' now' : '');
+  });
+}
+
+function renderQuestion(){
+  renderProgress();
+  const item = QUESTIONS[current];
+  document.getElementById('qcount').textContent = `Question ${current+1} of ${QUESTIONS.length}`;
+  document.getElementById('qtext').textContent = item.q;
+  const opts = document.getElementById('opts');
+  opts.innerHTML = '';
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback'; fb.innerHTML = '';
+  document.getElementById('nextBtn').classList.remove('show');
+  item.opts.forEach((text,i)=>{
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.innerHTML = `<span class="key">${'ABCD'[i]}</span><span>${text}</span>`;
+    b.addEventListener('click', ()=>choose(i,b));
+    opts.appendChild(b);
+  });
+}
+
+function choose(i, btn){
+  const item = QUESTIONS[current];
+  const buttons = [...document.querySelectorAll('.opt')];
+  buttons.forEach(b=>b.disabled = true);
+  const correct = i === item.answer;
+  if (correct) score++;
+  answers.push({correct, picked: item.opts[i]});
+  buttons.forEach((b,idx)=>{
+    if (idx === item.answer) b.classList.add('correct');
+    else if (idx === i) b.classList.add('wrong');
+    else b.classList.add('dim');
+  });
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback show ' + (correct ? 'good' : 'bad');
+  fb.innerHTML = `<b>${correct ? 'Correct!' : 'Not quite.'}</b>${item.why}`;
+  const next = document.getElementById('nextBtn');
+  next.textContent = current === QUESTIONS.length - 1 ? 'See my result' : 'Next question';
+  next.classList.add('show');
+}
+
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  current++;
+  if (current < QUESTIONS.length) renderQuestion();
+  else showResult();
+});
+
+function showResult(){
+  renderProgress();
+  document.getElementById('quiz').style.display = 'none';
+  const r = document.getElementById('result');
+  r.classList.add('show');
+  document.getElementById('scoreNum').textContent = `${score}/${QUESTIONS.length}`;
+  const msgs = {
+    5: "Excellent — you've got the MFBC model down. You're ready for the in-class activity.",
+    4: "Strong work. Skim the Quick Reference table (lecture slide 10) once more before class.",
+    3: "Good start. Revisit how involvement and knowledge change the recommended frame.",
+    2: "Worth a re-read: check the MFBC model slides on self-construal, involvement and knowledge.",
+    1: "Review the Week 6 lecture slides on message framing before class — it will make the group task much easier.",
+    0: "Review the Week 6 lecture slides on message framing before class — it will make the group task much easier."
+  };
+  document.getElementById('scoreMsg').textContent = msgs[score];
+  const list = document.getElementById('recapList');
+  list.innerHTML = '';
+  QUESTIONS.forEach((q,i)=>{
+    const d = document.createElement('div');
+    d.className = 'recap';
+    d.innerHTML = `<span class="pill ${answers[i].correct?'ok':'no'}">${answers[i].correct?'Correct':'Missed'}</span>
+      <p class="rq">Q${i+1}. ${q.q}</p>
+      <p class="ra">Answer: <b>${q.opts[q.answer]}</b></p>`;
+    list.appendChild(d);
+  });
+}
+
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  current = 0; score = 0; answers.length = 0;
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('quiz').style.display = '';
+  renderQuestion();
+  window.scrollTo({top:0});
+});
+
+renderQuestion();
+</script>
+</body>
+</html>
